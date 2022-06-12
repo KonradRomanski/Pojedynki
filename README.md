@@ -14,4 +14,4 @@ Nie trzeba sekundantów. Po pojedynku zawsze trzeba trafić do jednej ze szpital
 [Opis źródłowy](https://www.cs.put.poznan.pl/adanilecki/pr/projekty.shtml#pojedynki)
 
 -------
-<p align="center">Created by Kacper Banasik & Konrad Romański </p>
+<p align="center">© Created by Kacper Banasik & Konrad Romański </p>
