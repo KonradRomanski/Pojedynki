@@ -1,11 +1,10 @@
 SOURCES=$(wildcard *.c)
-# HEADERS=$(SOURCES:.c=.h)
+HEADERS=$(SOURCES:.c=.h)
 FLAGS=-DDEBUG -g
 
-all: run
+all: main
 
-# main: $(SOURCES) $(HEADERS)
-main: $(SOURCES)
+main: $(SOURCES) $(HEADERS)
 	mpicc $(SOURCES) $(FLAGS) -o main
 
 clear: clean

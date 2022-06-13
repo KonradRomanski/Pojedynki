@@ -1,3 +1,5 @@
+#ifndef PROCESS_QUEUEH
+#define PROCESS_QUEUEH
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +22,17 @@ typedef struct{
     int size;
     int reserved;
 } process_queue_t;
+
+void insertElement(process_queue_t * process_queue, queue_element_t el);
+void removeProcess(process_queue_t * process_queue, int process);
+void removeNFirstElements(process_queue_t * process_queue, int N);
+int findProcess(process_queue_t * process_queue, int process);
+
+void reserveQueue(process_queue_t * process_queue, int reserved);
+void initQueue(process_queue_t * process_queue, int initialReserved);
+void freeQueue(process_queue_t * process_queue);
+
+int moreImportant(queue_element_t elementA, queue_element_t elementB);
 
 
 void insertElement(process_queue_t * process_queue, queue_element_t el)
@@ -135,3 +148,5 @@ int moreImportant(queue_element_t elementA, queue_element_t elementB)
       return TRUE;
   return FALSE;
 }
+
+#endif

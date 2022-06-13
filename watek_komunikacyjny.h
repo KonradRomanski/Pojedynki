@@ -1,4 +1,25 @@
+#ifndef WATEK_KOMUNIKACYJNY_H
+#define WATEK_KOMUNIKACYJNY_H
 #include "process_queue.h"
+
+/* wątek komunikacyjny: odbieranie wiadomości i reagowanie na nie poprzez zmiany stanu */
+void *startKomWatek(void *ptr);
+
+void onStartLocating();
+void onStartFight();
+void onStartQueueWait();
+void onStartGathering();
+void onStartResting();
+void onStartReady();
+void case_PAIR_SZUKAM(packet_t pakiet);
+void case_PAIR_SYNC(packet_t pakiet);
+void case_PAIR_JESTEM(packet_t pakiet);
+void case_REQ_SALKA(packet_t pakiet);
+void case_ACK_SALKA(packet_t pakiet);
+void case_FIGHT_READY(packet_t pakiet);
+
+void reqZ(packet_t pakiet, int str, int msgT);
+void ackZ(packet_t pakiet, int str, int N);
 
 
 /* wątek komunikacyjny; zajmuje się odbiorem i reakcją na komunikaty */
@@ -60,7 +81,7 @@ void case_PAIR_SZUKAM(packet_t pakiet)
   if (size >= 4)
     debug("Moja kolejka procesów - początek: [%d, %d, %d, %d, ...",
           processQueue.data[0].process, processQueue.data[1].process, processQueue.data[2].process, processQueue.data[3].process);
-  sendPacket(0, pakiet.src, PAIR_SYNC);
+  // sendPacket(0, pakiet.src, PAIR_SYNC);
 }
 
 void case_PAIR_SYNC(packet_t pakiet)
@@ -80,8 +101,8 @@ void case_PAIR_SYNC(packet_t pakiet)
         przeciwnik = processQueue.data[mPos - 1].process;
         debug("Moim przeciwnikiem jest %d", przeciwnik);
         removeNFirstElements(&processQueue, mPos + 1);
+        sendPacket(0, pakiet.src, PAIR_SYNC);
         changeState(GATHERING, "GATHERING", onStartGathering);
-        changeState(FIGHT, "FIGHT", onStartFight);
       }
       else
       {
@@ -93,15 +114,15 @@ void case_PAIR_SYNC(packet_t pakiet)
           removeNFirstElements(&processQueue, mPos + 2);
           changeState(GATHERING, "GATHERING", onStartGathering);
           sendPacket(0, przeciwnik, PAIR_JESTEM);
-          changeState(FIGHT, "FIGHT", onStartFight);
+          // sendPacket(0, pakiet.src, PAIR_SYNC);
+
+          // changeState(FIGHT, "FIGHT", onStartFight);
 
         }
         else
         {
           removeNFirstElements(&processQueue, mPos);
           changeState(QUEUE_WAIT, "QUEUE_WAIT", onStartQueueWait);
-          changeState(GATHERING, "GATHERING", onStartGathering);
-
         }
       }
     }
@@ -226,3 +247,5 @@ void onStartReady()
   opponentReady = FALSE;
   rezSalke = FALSE;
 }
+
+#endif
